@@ -21,6 +21,7 @@ public class Kommunikation {
     
     public static void main(String args[]) {
           GUI gui = new GUI();
+         gui.setPanel_datelist(false);
    gui.setVisible(true);
 		try {
 			/*

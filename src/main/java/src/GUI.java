@@ -15,8 +15,12 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -39,6 +43,7 @@ public class GUI extends javax.swing.JFrame implements
    DefaultListModel listModel = new DefaultListModel();
    HashMap<String, Integer> list= new HashMap<String, Integer>();
     ConcurrentHashMap<String,Station> list_st=new  ConcurrentHashMap<String,Station>(); 
+  //  ConcurrentHashMap<String,AktuelleWerte> list_date=new  ConcurrentHashMap<String,Station>(); 
     DefaultListModel list_station = new DefaultListModel();
       //List<String> list11 = new ArrayList<String>();
   
@@ -70,6 +75,10 @@ public class GUI extends javax.swing.JFrame implements
         Variance = new javax.swing.JTextField();
         button1 = new java.awt.Button();
         butten_variance = new javax.swing.JButton();
+        panel_datelist = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        Date_list = new javax.swing.JList<>();
         Menu = new javax.swing.JMenuBar();
         Diagramme = new javax.swing.JMenu();
 
@@ -92,9 +101,9 @@ public class GUI extends javax.swing.JFrame implements
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -125,11 +134,6 @@ public class GUI extends javax.swing.JFrame implements
 
         date.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         date.setDisabledTextColor(new java.awt.Color(0, 0, 0));
-        date.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dateActionPerformed(evt);
-            }
-        });
         date.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 dateKeyReleased(evt);
@@ -190,22 +194,60 @@ public class GUI extends javax.swing.JFrame implements
             }
         });
 
+        panel_datelist.setBackground(new java.awt.Color(51, 102, 255));
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setText("Date List: ");
+
+        Date_list.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Date_listMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(Date_list);
+
+        javax.swing.GroupLayout panel_datelistLayout = new javax.swing.GroupLayout(panel_datelist);
+        panel_datelist.setLayout(panel_datelistLayout);
+        panel_datelistLayout.setHorizontalGroup(
+            panel_datelistLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_datelistLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panel_datelistLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panel_datelistLayout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 70, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        panel_datelistLayout.setVerticalGroup(
+            panel_datelistLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_datelistLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE))
+        );
+
+        jLabel1.getAccessibleContext().setAccessibleName("");
+
         javax.swing.GroupLayout contenuLayout = new javax.swing.GroupLayout(contenu);
         contenu.setLayout(contenuLayout);
         contenuLayout.setHorizontalGroup(
             contenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(contenuLayout.createSequentialGroup()
-                .addGap(49, 49, 49)
+                .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
-                .addComponent(info, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(info, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(60, 60, 60))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panel_datelist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenuLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(butten_variance)
-                .addGap(122, 122, 122))
+                .addGap(248, 248, 248))
         );
         contenuLayout.setVerticalGroup(
             contenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -215,14 +257,17 @@ public class GUI extends javax.swing.JFrame implements
                         .addGap(44, 44, 44)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(contenuLayout.createSequentialGroup()
+                        .addGap(102, 102, 102)
+                        .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(contenuLayout.createSequentialGroup()
                         .addGap(44, 44, 44)
                         .addComponent(info, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(contenuLayout.createSequentialGroup()
-                        .addGap(103, 103, 103)
-                        .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenuLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(panel_datelist, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
                 .addComponent(butten_variance)
-                .addGap(51, 51, 51))
+                .addGap(72, 72, 72))
         );
 
         Diagramme.setText("Diagramme");
@@ -248,9 +293,7 @@ public class GUI extends javax.swing.JFrame implements
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(contenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 10, Short.MAX_VALUE))
+            .addComponent(contenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -260,30 +303,41 @@ public class GUI extends javax.swing.JFrame implements
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    
+    
+    
+    public void Trier(ArrayList l)
+    {
+        Collections.sort(l);
+    }
     private void DiagrammeMenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_DiagrammeMenuSelected
 
     }//GEN-LAST:event_DiagrammeMenuSelected
 
     private void DiagrammeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_DiagrammeMouseClicked
        try{
+           
+          ArrayList<Date> l = new ArrayList<>();
            Station station;
              DefaultCategoryDataset dateset = new DefaultCategoryDataset();
            
              station=list_st.get(Station_ID.getText());
-          /*   if(!station.getAktuelleWerte().isEmpty())
-          *   {
-         *        String st=station.getAktuelleWerte().keys().nextElement();
-          *   date.setText(st);
-          *   Variance.setText(Integer.toString(station.getAktuelleWerte().get(st).getRelativeAbweichung()));
-          *   }
-            else
-          *   {
-          *       date.setText("");
-             }*/
+          
            for(String datum: station.getAktuelleWerte().keySet())
            {
-               dateset.setValue(station.getAktuelleWerte().get(datum).getRelativeAbweichung(),"", datum);
+            int tag=Integer.parseInt(datum.substring(0, 2));
+            int monate=Integer.parseInt(datum.substring(3, 5));
+            int jahre=Integer.parseInt(datum.substring(6, 10));
+              l.add(new Date(jahre,monate,tag));
            }
+           Collections.sort(l);
+            for(int i=0;i<l.size();i++) {
+                String date=l.get(i).getDate()+"."+l.get(i).getMonth()+"."+l.get(i).getYear();
+               dateset.setValue(station.getAktuelleWerte().get(date).getRelativeAbweichung(),"", date);
+            }
+        
+           
             JFreeChart chart=ChartFactory.createLineChart(station_list.getSelectedValue(), "Date", "Variance", dateset, PlotOrientation.VERTICAL, false, true,true);
             BarRenderer renderer=null;
             CategoryPlot plot=null;
@@ -301,6 +355,7 @@ public class GUI extends javax.swing.JFrame implements
 
     private void butten_varianceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_butten_varianceActionPerformed
         try {
+            Variance.setText("");
             ZweiwegeClientkommunikator<Aenderungsmeldung, StationAenderung> zCK = new ZweiwegeClientkommunikator<Aenderungsmeldung, StationAenderung>(
                 "54.89.87.213", new NeuesObjektListener<Aenderungsmeldung>() {
                     /*
@@ -310,19 +365,13 @@ public class GUI extends javax.swing.JFrame implements
                     public void neuesAustauschobjekt(Aenderungsmeldung austauschobjekt) {
 
                        Tageswerte.Darstellung variance=austauschobjekt.getTageswerte().getDarstellung();
-                      /*  if(variance-Integer.parseInt(Taregt.getText())<=10)
-                     *   Variance.setDisabledTextColor(Color.RED);
-                     *   if(variance-Integer.parseInt(Taregt.getText())>=5)
-                     *   Variance.setDisabledTextColor(Color.GREEN);
-                       
-                      */ 
                       if(variance.equals(Tageswerte.Darstellung.HOCH))
                           Variance.setDisabledTextColor(Color.GREEN);
                        if(variance.equals(Tageswerte.Darstellung.NIEDRIG))
                           Variance.setDisabledTextColor(Color.RED);
                          if(variance.equals(Tageswerte.Darstellung.NORMAL))
                             Variance.setDisabledTextColor(Color.BLACK);
-                      Variance.setText(Integer.toString(austauschobjekt.getTageswerte().getAbweichung()) +""+"%");
+                      Variance.setText(Integer.toString(austauschobjekt.getTageswerte().getRelativeAbweichung())+"%");
                       //  list_station.addElement(new Aenderungsmeldung(Station_ID.getText(),date.getText(),austauschobjekt.getTageswerte().getAktuellerWert(),austauschobjekt.getTageswerte().getAbweichung(),austauschobjekt.getTageswerte().getRelativeAbweichung()));
                      Station a= list_st.get(austauschobjekt.getStationID());
                      a.getAktuelleWerte().put(austauschobjekt.getDatum(), austauschobjekt.getTageswerte());
@@ -347,7 +396,8 @@ public class GUI extends javax.swing.JFrame implements
                 e.printStackTrace();
             }
     }//GEN-LAST:event_butten_varianceActionPerformed
-
+    
+    
     private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
         //  Geburtsdatum (nach dem Muster TT.MM.JJJJ ausfüllen):
         JOptionPane.showMessageDialog(null,"Date (nach dem Muster TT.MM.JJJJ ausfüllen");
@@ -360,27 +410,33 @@ public class GUI extends javax.swing.JFrame implements
         }
     }//GEN-LAST:event_ActuelKeyTyped
 
-    private void dateKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dateKeyTyped
-        char c=evt.getKeyChar();
-        String st=this.date.getText();
-        if(!(Character.isDigit(c)) || c==KeyEvent.VK_DELETE || st.length()==10){
-            evt.consume();
-        }
-    }//GEN-LAST:event_dateKeyTyped
-
-    private void dateKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dateKeyReleased
-        String st=this.date.getText();
-        if(st.length()==2 || st.length()==5)
-        {
-            date.setText(st+".");
-        }
-    }//GEN-LAST:event_dateKeyReleased
-
-    private void dateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateActionPerformed
-
-    }//GEN-LAST:event_dateActionPerformed
-
     private void station_listMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_station_listMouseClicked
+        try
+        {
+            ArrayList<Date> l = new ArrayList<>();
+        DefaultListModel listdate = new DefaultListModel();
+        Station station;
+        station=list_st.get(station_list.getSelectedValue());
+        if((station.getAktuelleWerte().size())>0)
+        {
+            panel_datelist.setVisible(true);
+           for(String datum: station.getAktuelleWerte().keySet())
+           {
+            int tag=Integer.parseInt(datum.substring(0, 2));
+            int monate=Integer.parseInt(datum.substring(3, 5));
+            int jahre=Integer.parseInt(datum.substring(6, 10));
+              l.add(new Date(jahre,monate,tag));
+           }
+           Collections.sort(l);
+            for(int i=0;i<l.size();i++) {
+                String date=l.get(i).getDate()+"."+l.get(i).getMonth()+"."+l.get(i).getYear();
+                listdate.addElement(date);
+            }
+           Date_list.setModel(listdate);
+        }
+        else
+            panel_datelist.setVisible(false);
+        
         butten_variance.setEnabled(true);
         Station_ID.setText(station_list.getSelectedValue());
         String ch=station_list.getSelectedValue();
@@ -388,8 +444,110 @@ public class GUI extends javax.swing.JFrame implements
         date.setText("");
         Actuel.setText("");
         Variance.setText("");
+        }
+        catch (Exception e) {
+           JOptionPane.showMessageDialog(null,e.toString());
+            }
     }//GEN-LAST:event_station_listMouseClicked
+ 
+      
+    private void dateKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dateKeyTyped
+         char c=evt.getKeyChar();
+        String st=this.date.getText();
+        if(!(Character.isDigit(c)) || c==KeyEvent.VK_DELETE || st.length()==10){
+            evt.consume();
+        }
+    }//GEN-LAST:event_dateKeyTyped
 
+    private void dateKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dateKeyReleased
+      String st=this.date.getText();
+      try{
+        if(st.length()==2)
+        {
+         String tag=st.substring(0, 2);
+         if(Integer.parseInt(tag)<=31)
+            date.setText(st+".");
+         else
+         {JOptionPane.showMessageDialog(null,"\"TT ist falsch\"");
+             date.setText("");
+         }
+        }
+         if(st.length()==5)
+        {
+         String tag=st.substring(3, 5);
+         if(Integer.parseInt(tag)<=12)
+            date.setText(st+".");
+         else
+         {JOptionPane.showMessageDialog(null,"\"MM ist falsch\"");
+             date.setText("");
+         }
+        }
+          if(st.length()==10)
+        {
+         String tag=st.substring(6, 10);
+         if(Integer.parseInt(tag)<=2015)      
+         {JOptionPane.showMessageDialog(null,"\"JJJJ ist falsch\"");
+             date.setText("");
+         }
+         
+        }
+       
+      }
+      catch (Exception e) {
+                // TODO Auto-generated catch block
+               
+                JOptionPane.showMessageDialog(null,e.toString());
+            }
+    }//GEN-LAST:event_dateKeyReleased
+
+    private void Date_listMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Date_listMouseClicked
+         try
+        {
+         
+         date.setText("");
+        Actuel.setText("");
+        Variance.setText("");
+        
+        Station station;
+        station=list_st.get(station_list.getSelectedValue());
+        
+          date.setText(Date_list.getSelectedValue());
+          String wert=Integer.toString(station.getAktuelleWerte().get(Date_list.getSelectedValue()).getAktuellerWert());
+        Actuel.setText(wert);
+           String var=Integer.toString(station.getAktuelleWerte().get(Date_list.getSelectedValue()).getRelativeAbweichung());
+         Tageswerte.Darstellung variance=station.getAktuelleWerte().get(date.getText()).getDarstellung();
+                      if(variance.equals(Tageswerte.Darstellung.HOCH))
+                          Variance.setDisabledTextColor(Color.GREEN);
+                       if(variance.equals(Tageswerte.Darstellung.NIEDRIG))
+                          Variance.setDisabledTextColor(Color.RED);
+                         if(variance.equals(Tageswerte.Darstellung.NORMAL))
+                            Variance.setDisabledTextColor(Color.BLACK);
+        Variance.setText(var+"%");
+           
+   
+        butten_variance.setEnabled(true);
+        Station_ID.setText(station_list.getSelectedValue());
+        String ch=station_list.getSelectedValue();
+        Taregt.setText(Integer.toString(list_st.get(ch).getVorgabewert()));
+      
+        }
+        catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+                    
+    }//GEN-LAST:event_Date_listMouseClicked
+
+    public JPanel getPanel_datelist() {
+        return panel_datelist;
+    }
+
+    public void setPanel_datelist(Boolean visib) {
+        this.panel_datelist.setVisible(visib);
+    }
+                            
+
+   
     public String getStation_ID() {
         return Station_ID.getText();
     }
@@ -446,6 +604,7 @@ public class GUI extends javax.swing.JFrame implements
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Actuel;
+    private javax.swing.JList<String> Date_list;
     private javax.swing.JMenu Diagramme;
     private javax.swing.JLabel Label_Actuel;
     private javax.swing.JLabel Label_Date;
@@ -461,8 +620,11 @@ public class GUI extends javax.swing.JFrame implements
     private javax.swing.JPanel contenu;
     private javax.swing.JTextField date;
     private javax.swing.JPanel info;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JPanel panel_datelist;
     private javax.swing.JList<String> station_list;
     // End of variables declaration//GEN-END:variables
 
