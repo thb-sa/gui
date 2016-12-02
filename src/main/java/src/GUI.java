@@ -333,7 +333,14 @@ public class GUI extends javax.swing.JFrame implements
            }
            Collections.sort(l);
             for(int i=0;i<l.size();i++) {
-                String date=l.get(i).getDate()+"."+l.get(i).getMonth()+"."+l.get(i).getYear();
+                 String tag=Integer.toString(l.get(i).getDate());
+                String monate=Integer.toString(l.get(i).getMonth());
+                String jahre=Integer.toString(l.get(i).getYear());
+                if(l.get(i).getDate()<10)
+                     tag="0"+ tag;
+                if(l.get(i).getMonth()<10)
+                    monate="0"+monate;             
+                String date=tag+"."+monate+"."+jahre;
                dateset.setValue(station.getAktuelleWerte().get(date).getRelativeAbweichung(),"", date);
             }
         
@@ -429,7 +436,14 @@ public class GUI extends javax.swing.JFrame implements
            }
            Collections.sort(l);
             for(int i=0;i<l.size();i++) {
-                String date=l.get(i).getDate()+"."+l.get(i).getMonth()+"."+l.get(i).getYear();
+                String tag=Integer.toString(l.get(i).getDate());
+                String monate=Integer.toString(l.get(i).getMonth());
+                String jahre=Integer.toString(l.get(i).getYear());
+                if(l.get(i).getDate()<10)
+                     tag="0"+ tag;
+                if(l.get(i).getMonth()<10)
+                    monate="0"+monate;
+                String date=tag+"."+monate+"."+jahre;
                 listdate.addElement(date);
             }
            Date_list.setModel(listdate);
@@ -485,7 +499,7 @@ public class GUI extends javax.swing.JFrame implements
           if(st.length()==10)
         {
          String tag=st.substring(6, 10);
-         if(Integer.parseInt(tag)<=2015)      
+         if(Integer.parseInt(tag)<2015)      
          {JOptionPane.showMessageDialog(null,"\"JJJJ ist falsch\"");
              date.setText("");
          }
