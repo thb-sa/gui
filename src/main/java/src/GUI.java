@@ -43,9 +43,9 @@ public class GUI extends javax.swing.JFrame implements
    DefaultListModel listModel = new DefaultListModel();
    HashMap<String, Integer> list= new HashMap<String, Integer>();
     ConcurrentHashMap<String,Station> list_st=new  ConcurrentHashMap<String,Station>(); 
-  //  ConcurrentHashMap<String,AktuelleWerte> list_date=new  ConcurrentHashMap<String,Station>(); 
+ 
     DefaultListModel list_station = new DefaultListModel();
-      //List<String> list11 = new ArrayList<String>();
+     
   
     public GUI() {
         initComponents();
@@ -307,10 +307,7 @@ public class GUI extends javax.swing.JFrame implements
     
     
     
-    public void Trier(ArrayList l)
-    {
-        Collections.sort(l);
-    }
+ 
     private void DiagrammeMenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_DiagrammeMenuSelected
 
     }//GEN-LAST:event_DiagrammeMenuSelected
@@ -606,15 +603,7 @@ public class GUI extends javax.swing.JFrame implements
         this.Variance.setDisabledTextColor(color);
     }
 
-    public static void main(String args[]) {
-    
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                
-                new GUI().setVisible(true);
-            }
-        });
-    }
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Actuel;
