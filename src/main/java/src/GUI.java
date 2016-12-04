@@ -436,12 +436,13 @@ public class GUI extends javax.swing.JFrame    implements
                          if(variance.equals(Tageswerte.Darstellung.NORMAL))
                             Variance.setDisabledTextColor(Color.BLACK);
                       Variance.setText(Integer.toString(austauschobjekt.getTageswerte().getRelativeAbweichung())+"%");
-                      //  list_station.addElement(new Aenderungsmeldung(Station_ID.getText(),date.getText(),austauschobjekt.getTageswerte().getAktuellerWert(),austauschobjekt.getTageswerte().getAbweichung(),austauschobjekt.getTageswerte().getRelativeAbweichung()));
                      Station a= list_st.get(austauschobjekt.getStationID());
                      a.getAktuelleWerte().put(austauschobjekt.getDatum(), austauschobjekt.getTageswerte());
+                      Date_list();
                     }
+                 
                 }, ZweiwegeClientkommunikator.ZWEIWEGEKOMMUNIKATION);
-
+                
                 /*
                 * Sehr wichtig: das Starten des Threads nicht vergessen
                 */
@@ -450,7 +451,7 @@ public class GUI extends javax.swing.JFrame    implements
                 * Hier wird jetzt beispielsweise eine StationsAenderung versendet.
                 */
                 zCK.versende(new StationAenderung(Station_ID.getText(),date.getText(), Integer.parseInt(Actuel.getText())));
-                this.Date_list();
+                
              }
                else
               JOptionPane.showMessageDialog(null,"DateFormat ist Falsch ");
@@ -576,11 +577,19 @@ public Boolean test_date(String date)
          }
         }
          if(st.length()==5)
-        {
-   
+        { String tag=st.substring(3, 5);
+         if(Integer.parseInt(tag)<=31 &&Integer.parseInt(tag)>0)
+            date.setText(st+".");
+         else
+         {JOptionPane.showMessageDialog(null,"Date (nach dem Muster TT.MM.JJJJ ausfüllen");
+             date.setText("");
+         }
          
         }
-       
+       if(st.length()==10)
+       {
+           evt.consume();
+       }
       }
       catch (Exception e) {
                 // TODO Auto-generated catch block
