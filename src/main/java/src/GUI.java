@@ -14,6 +14,8 @@ import java.awt.Panel;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,6 +24,8 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -37,8 +41,9 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 
 
-public class GUI extends javax.swing.JFrame implements
+public class GUI extends javax.swing.JFrame    implements
 			NeuesObjektListener<Station> {
+ Thread th =new  Thread();
 
    DefaultListModel listModel = new DefaultListModel();
    HashMap<String, Integer> list= new HashMap<String, Integer>();
@@ -79,6 +84,8 @@ public class GUI extends javax.swing.JFrame implements
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         Date_list = new javax.swing.JList<>();
+        Panel_newStation = new javax.swing.JPanel();
+        newStation = new javax.swing.JLabel();
         Menu = new javax.swing.JMenuBar();
         Diagramme = new javax.swing.JMenu();
 
@@ -230,24 +237,52 @@ public class GUI extends javax.swing.JFrame implements
 
         jLabel1.getAccessibleContext().setAccessibleName("");
 
+        Panel_newStation.setBackground(new java.awt.Color(51, 102, 255));
+        Panel_newStation.setToolTipText("");
+
+        newStation.setBackground(new java.awt.Color(255, 0, 0));
+        newStation.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        newStation.setForeground(new java.awt.Color(255, 0, 0));
+
+        javax.swing.GroupLayout Panel_newStationLayout = new javax.swing.GroupLayout(Panel_newStation);
+        Panel_newStation.setLayout(Panel_newStationLayout);
+        Panel_newStationLayout.setHorizontalGroup(
+            Panel_newStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Panel_newStationLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(newStation)
+                .addContainerGap(293, Short.MAX_VALUE))
+        );
+        Panel_newStationLayout.setVerticalGroup(
+            Panel_newStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Panel_newStationLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(newStation)
+                .addContainerGap(69, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout contenuLayout = new javax.swing.GroupLayout(contenu);
         contenu.setLayout(contenuLayout);
         contenuLayout.setHorizontalGroup(
             contenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(contenuLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(info, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panel_datelist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenuLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(butten_variance)
-                .addGap(248, 248, 248))
+                .addGroup(contenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(contenuLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(Panel_newStation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(butten_variance)
+                        .addGap(248, 248, 248))
+                    .addGroup(contenuLayout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(info, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(panel_datelist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         contenuLayout.setVerticalGroup(
             contenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -265,9 +300,15 @@ public class GUI extends javax.swing.JFrame implements
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenuLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(panel_datelist, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
-                .addComponent(butten_variance)
-                .addGap(72, 72, 72))
+                .addGroup(contenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(contenuLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                        .addComponent(butten_variance)
+                        .addGap(72, 72, 72))
+                    .addGroup(contenuLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Panel_newStation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         Diagramme.setText("Diagramme");
@@ -329,6 +370,17 @@ public class GUI extends javax.swing.JFrame implements
               l.add(new Date(jahre,monate,tag));
            }
            Collections.sort(l);
+           if(l.size()>5)
+           { int j=0;
+            ArrayList<Date> list = new ArrayList<>();
+                for(int i=l.size()-1;j<5;i--) {
+                    list.add(l.get(i));
+                    j++;
+                }
+                l.removeAll(l);
+                l.addAll(list);
+                Collections.sort(l);
+           }
             for(int i=0;i<l.size();i++) {
                  String tag=Integer.toString(l.get(i).getDate());
                 String monate=Integer.toString(l.get(i).getMonth());
@@ -348,7 +400,7 @@ public class GUI extends javax.swing.JFrame implements
             renderer=new BarRenderer();
             ChartFrame frame=new  ChartFrame("variance",chart);
             frame.setVisible(true);
-            frame.setSize(400, 400);
+            frame.setSize(600, 400);
 
         }
         catch (Exception e){
@@ -359,6 +411,14 @@ public class GUI extends javax.swing.JFrame implements
 
     private void butten_varianceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_butten_varianceActionPerformed
         try {
+
+           if(date.getText().length()==10)
+           {String d=date.getText();
+               String dat= d.substring(0, 2)+ d.substring(3, 5)+ d.substring(6, 10);
+               if(test_date(dat))
+               {
+                   
+             
             Variance.setText("");
             ZweiwegeClientkommunikator<Aenderungsmeldung, StationAenderung> zCK = new ZweiwegeClientkommunikator<Aenderungsmeldung, StationAenderung>(
                 "54.89.87.213", new NeuesObjektListener<Aenderungsmeldung>() {
@@ -386,18 +446,26 @@ public class GUI extends javax.swing.JFrame implements
                 * Sehr wichtig: das Starten des Threads nicht vergessen
                 */
                 zCK.start();
-
                 /*
                 * Hier wird jetzt beispielsweise eine StationsAenderung versendet.
                 */
                 zCK.versende(new StationAenderung(Station_ID.getText(),date.getText(), Integer.parseInt(Actuel.getText())));
-                            
+                this.Date_list();
+             }
+               else
+              JOptionPane.showMessageDialog(null,"DateFormat ist Falsch ");
+           }
+           else
+               JOptionPane.showMessageDialog(null,"Date (nach dem Muster TT.MM.JJJJ ausfüllen ");
             } catch (UnknownHostException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
+                JOptionPane.showMessageDialog(null, e.toString());
+                
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
+                JOptionPane.showMessageDialog(null, e.toString());
             }
     }//GEN-LAST:event_butten_varianceActionPerformed
     
@@ -413,11 +481,10 @@ public class GUI extends javax.swing.JFrame implements
             evt.consume();
         }
     }//GEN-LAST:event_ActuelKeyTyped
-
-    private void station_listMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_station_listMouseClicked
-        try
-        {
-            ArrayList<Date> l = new ArrayList<>();
+private void Date_list()
+{
+    try{
+         ArrayList<Date> l = new ArrayList<>();
         DefaultListModel listdate = new DefaultListModel();
         Station station;
         station=list_st.get(station_list.getSelectedValue());
@@ -447,7 +514,32 @@ public class GUI extends javax.swing.JFrame implements
         }
         else
             panel_datelist.setVisible(false);
-        
+    }
+    catch (Exception e) {
+           JOptionPane.showMessageDialog(null,e.toString());
+            }
+}
+
+public Boolean test_date(String date)
+{
+   //  String s = "20070229"; // 29 février 2007 !
+    
+        SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy" );
+        dateFormat.setLenient(false);
+        java.util.Date dat = null;
+        try {
+            dat = dateFormat.parse(date);
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+       
+        return true;
+}
+    private void station_listMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_station_listMouseClicked
+        try
+        {
+        this.Date_list();
         butten_variance.setEnabled(true);
         Station_ID.setText(station_list.getSelectedValue());
         String ch=station_list.getSelectedValue();
@@ -476,30 +568,16 @@ public class GUI extends javax.swing.JFrame implements
         if(st.length()==2)
         {
          String tag=st.substring(0, 2);
-         if(Integer.parseInt(tag)<=31)
+         if(Integer.parseInt(tag)<=31 &&Integer.parseInt(tag)>0)
             date.setText(st+".");
          else
-         {JOptionPane.showMessageDialog(null,"\"TT ist falsch\"");
+         {JOptionPane.showMessageDialog(null,"Date (nach dem Muster TT.MM.JJJJ ausfüllen");
              date.setText("");
          }
         }
          if(st.length()==5)
         {
-         String tag=st.substring(3, 5);
-         if(Integer.parseInt(tag)<=12)
-            date.setText(st+".");
-         else
-         {JOptionPane.showMessageDialog(null,"\"MM ist falsch\"");
-             date.setText("");
-         }
-        }
-          if(st.length()==10)
-        {
-         String tag=st.substring(6, 10);
-         if(Integer.parseInt(tag)<2015)      
-         {JOptionPane.showMessageDialog(null,"\"JJJJ ist falsch\"");
-             date.setText("");
-         }
+   
          
         }
        
@@ -615,6 +693,7 @@ public class GUI extends javax.swing.JFrame implements
     private javax.swing.JLabel Label_Taregt;
     private javax.swing.JLabel Label_variance;
     private javax.swing.JMenuBar Menu;
+    private javax.swing.JPanel Panel_newStation;
     private javax.swing.JTextField Station_ID;
     private javax.swing.JTextField Taregt;
     private javax.swing.JTextField Variance;
@@ -627,6 +706,7 @@ public class GUI extends javax.swing.JFrame implements
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel newStation;
     private javax.swing.JPanel panel_datelist;
     private javax.swing.JList<String> station_list;
     // End of variables declaration//GEN-END:variables
@@ -635,9 +715,9 @@ public class GUI extends javax.swing.JFrame implements
     public void neuesAustauschobjekt(Station a) {      
    
        listModel.addElement(a.getStationID());
-      // list.put(a.getStationID(), a.getVorgabewert());
        list_st.put(a.getStationID(), a);
- 
+      
+       
     }
 }
 
