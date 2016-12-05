@@ -7,10 +7,7 @@ import datenKlassen.StationAenderung;
 import datenKlassen.Tageswerte;
 import funktionaleKlassen.NeuesObjektListener;
 import funktionaleKlassen.ZweiwegeClientkommunikator;
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.List;
-import java.awt.Panel;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -18,18 +15,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.JFreeChart;
@@ -55,7 +46,7 @@ public class GUI extends javax.swing.JFrame    implements
     public GUI() {
         initComponents();
         station_list.setModel(listModel);
-      
+        firstValue = System.currentTimeMillis();
     }
 
   
@@ -79,12 +70,11 @@ public class GUI extends javax.swing.JFrame    implements
         Label_variance = new javax.swing.JLabel();
         Variance = new javax.swing.JTextField();
         button1 = new java.awt.Button();
-        butten_variance = new javax.swing.JButton();
         panel_datelist = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         Date_list = new javax.swing.JList<>();
-        Panel_newStation = new javax.swing.JPanel();
+        butten_variance = new javax.swing.JButton();
         newStation = new javax.swing.JLabel();
         Menu = new javax.swing.JMenuBar();
         Diagramme = new javax.swing.JMenu();
@@ -152,9 +142,10 @@ public class GUI extends javax.swing.JFrame    implements
         info.add(date);
 
         Label_Taregt.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        Label_Taregt.setText("Taregt");
+        Label_Taregt.setText("Target");
         Label_Taregt.setName("label_taregt"); // NOI18N
         info.add(Label_Taregt);
+        Label_Taregt.getAccessibleContext().setAccessibleName("Target");
 
         Taregt.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         Taregt.setDisabledTextColor(new java.awt.Color(0, 0, 0));
@@ -190,14 +181,6 @@ public class GUI extends javax.swing.JFrame    implements
         button1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 button1ActionPerformed(evt);
-            }
-        });
-
-        butten_variance.setText("Variance");
-        butten_variance.setEnabled(false);
-        butten_variance.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                butten_varianceActionPerformed(evt);
             }
         });
 
@@ -237,29 +220,17 @@ public class GUI extends javax.swing.JFrame    implements
 
         jLabel1.getAccessibleContext().setAccessibleName("");
 
-        Panel_newStation.setBackground(new java.awt.Color(51, 102, 255));
-        Panel_newStation.setToolTipText("");
+        butten_variance.setText("Variance");
+        butten_variance.setEnabled(false);
+        butten_variance.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                butten_varianceActionPerformed(evt);
+            }
+        });
 
         newStation.setBackground(new java.awt.Color(255, 0, 0));
         newStation.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         newStation.setForeground(new java.awt.Color(255, 0, 0));
-
-        javax.swing.GroupLayout Panel_newStationLayout = new javax.swing.GroupLayout(Panel_newStation);
-        Panel_newStation.setLayout(Panel_newStationLayout);
-        Panel_newStationLayout.setHorizontalGroup(
-            Panel_newStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(Panel_newStationLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(newStation)
-                .addContainerGap(293, Short.MAX_VALUE))
-        );
-        Panel_newStationLayout.setVerticalGroup(
-            Panel_newStationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(Panel_newStationLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(newStation)
-                .addContainerGap(69, Short.MAX_VALUE))
-        );
 
         javax.swing.GroupLayout contenuLayout = new javax.swing.GroupLayout(contenu);
         contenu.setLayout(contenuLayout);
@@ -267,48 +238,46 @@ public class GUI extends javax.swing.JFrame    implements
             contenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(contenuLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(contenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(contenuLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(Panel_newStation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(butten_variance)
-                        .addGap(248, 248, 248))
-                    .addGroup(contenuLayout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(info, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(panel_datelist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(info, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panel_datelist, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(contenuLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(newStation, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(94, 94, 94)
+                .addComponent(butten_variance)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         contenuLayout.setVerticalGroup(
             contenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(contenuLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenuLayout.createSequentialGroup()
                 .addGroup(contenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(contenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(contenuLayout.createSequentialGroup()
+                            .addGap(44, 44, 44)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(contenuLayout.createSequentialGroup()
+                            .addGap(102, 102, 102)
+                            .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenuLayout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(panel_datelist, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(contenuLayout.createSequentialGroup()
                         .addGap(44, 44, 44)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(contenuLayout.createSequentialGroup()
-                        .addGap(102, 102, 102)
-                        .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(contenuLayout.createSequentialGroup()
-                        .addGap(44, 44, 44)
-                        .addComponent(info, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, contenuLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(panel_datelist, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(info, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(contenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(contenuLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
-                        .addComponent(butten_variance)
-                        .addGap(72, 72, 72))
+                        .addGap(45, 45, 45)
+                        .addComponent(newStation, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(contenuLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Panel_newStation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(55, 55, 55)
+                        .addComponent(butten_variance)))
+                .addContainerGap(90, Short.MAX_VALUE))
         );
 
         Diagramme.setText("Diagramme");
@@ -365,7 +334,7 @@ public class GUI extends javax.swing.JFrame    implements
            for(String datum: station.getAktuelleWerte().keySet())
            {
             int tag=Integer.parseInt(datum.substring(0, 2));
-            int monate=Integer.parseInt(datum.substring(3, 5));
+            int monate=Integer.parseInt(datum.substring(3, 5))-1;
             int jahre=Integer.parseInt(datum.substring(6, 10));
               l.add(new Date(jahre,monate,tag));
            }
@@ -383,11 +352,11 @@ public class GUI extends javax.swing.JFrame    implements
            }
             for(int i=0;i<l.size();i++) {
                  String tag=Integer.toString(l.get(i).getDate());
-                String monate=Integer.toString(l.get(i).getMonth());
+                String monate=Integer.toString(l.get(i).getMonth()+1);
                 String jahre=Integer.toString(l.get(i).getYear());
                 if(l.get(i).getDate()<10)
                      tag="0"+ tag;
-                if(l.get(i).getMonth()<10)
+                if(l.get(i).getMonth()<9)
                     monate="0"+monate;             
                 String date=tag+"."+monate+"."+jahre;
                dateset.setValue(station.getAktuelleWerte().get(date).getRelativeAbweichung(),"", date);
@@ -411,8 +380,9 @@ public class GUI extends javax.swing.JFrame    implements
 
     private void butten_varianceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_butten_varianceActionPerformed
         try {
-
-           if(date.getText().length()==10)
+            if(Actuel.getText().length()!=0)
+            {
+           if(date.getText().length()==10  )
            {String d=date.getText();
                String dat= d.substring(0, 2)+ d.substring(3, 5)+ d.substring(6, 10);
                if(test_date(dat))
@@ -458,6 +428,9 @@ public class GUI extends javax.swing.JFrame    implements
            }
            else
                JOptionPane.showMessageDialog(null,"Date (nach dem Muster TT.MM.JJJJ ausfüllen ");
+            }
+            else
+               JOptionPane.showMessageDialog(null,"Sie muessen Actuel abgeben "); 
             } catch (UnknownHostException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -495,18 +468,18 @@ private void Date_list()
            for(String datum: station.getAktuelleWerte().keySet())
            {
             int tag=Integer.parseInt(datum.substring(0, 2));
-            int monate=Integer.parseInt(datum.substring(3, 5));
+            int monate=Integer.parseInt(datum.substring(3, 5))-1;
             int jahre=Integer.parseInt(datum.substring(6, 10));
               l.add(new Date(jahre,monate,tag));
            }
            Collections.sort(l);
             for(int i=0;i<l.size();i++) {
                 String tag=Integer.toString(l.get(i).getDate());
-                String monate=Integer.toString(l.get(i).getMonth());
+                String monate=Integer.toString(l.get(i).getMonth()+1);
                 String jahre=Integer.toString(l.get(i).getYear());
                 if(l.get(i).getDate()<10)
                      tag="0"+ tag;
-                if(l.get(i).getMonth()<10)
+                if(l.get(i).getMonth()<9)
                     monate="0"+monate;
                 String date=tag+"."+monate+"."+jahre;
                 listdate.addElement(date);
@@ -702,7 +675,6 @@ public Boolean test_date(String date)
     private javax.swing.JLabel Label_Taregt;
     private javax.swing.JLabel Label_variance;
     private javax.swing.JMenuBar Menu;
-    private javax.swing.JPanel Panel_newStation;
     private javax.swing.JTextField Station_ID;
     private javax.swing.JTextField Taregt;
     private javax.swing.JTextField Variance;
@@ -720,13 +692,27 @@ public Boolean test_date(String date)
     private javax.swing.JList<String> station_list;
     // End of variables declaration//GEN-END:variables
 
+    private long firstValue, secondValue;
     @Override
     public void neuesAustauschobjekt(Station a) {      
-   
+   secondValue= System.currentTimeMillis();
        listModel.addElement(a.getStationID());
        list_st.put(a.getStationID(), a);
-      
-       
+     if(secondValue-firstValue > 30000){
+         new Thread(){
+             public void run(){
+                
+        newStation.setText("new Station: " + a.getStationID());
+        try{
+        sleep(3000);
+        } catch(Exception e){
+            
+        }
+        newStation.setText("");
+             }
+         }.start();
+     }
+      firstValue = secondValue;
     }
 }
 
