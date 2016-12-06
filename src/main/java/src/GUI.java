@@ -62,9 +62,16 @@ public class GUI extends javax.swing.JFrame implements
 								Variance.setDisabledTextColor(Color.RED);
 							if (variance.equals(Tageswerte.Darstellung.NORMAL))
 								Variance.setDisabledTextColor(Color.BLACK);
-							Variance.setText(Integer.toString(austauschobjekt
-									.getTageswerte().getRelativeAbweichung())
-									+ "%");
+							if (austauschobjekt.getStationID().equals(
+									Station_ID.getText())
+									&& austauschobjekt.getDatum().equals(
+											date.getText())) {
+								Variance.setText(Integer
+										.toString(austauschobjekt
+												.getTageswerte()
+												.getRelativeAbweichung())
+										+ "%");
+							}
 							Station a = list_st.get(austauschobjekt
 									.getStationID());
 							a.getAktuelleWerte().put(
